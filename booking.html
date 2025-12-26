@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>حجز متقدم — ILAFE RENT CAR</title>
+<meta name="description" content="نموذج الحجز المتقدم - ILAFE RENT CAR">
+<style>
+:root{
+  --bg:#050505; --card:#0f0f0f; --muted:#bfbdbd; --accent:#ffce00; --glass: rgba(255,255,255,0.03);
+  --radius:14px; --maxw:1200px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans Arabic',sans-serif;background:linear-gradient(180deg,#050505,#0b0b0b);color:#fff}
+.container{max-width:var(--maxw);margin:0 auto;padding:28px}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{display:flex;gap:16px;align-items:center}
+.brand img{width:110px;height:auto;border-radius:12px}
+.brand h1{margin:0;font-size:20px;letter-spacing:1px}
+.nav a{color:var(--muted);margin-left:12px;text-decoration:none;font-weight:600}
+.hero{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:center;margin-top:18px}
+.hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:24px;border-radius:18px;box-shadow:0 8px 40px rgba(0,0,0,0.6)}
+.h1{font-size:34px;margin:0 0 8px}
+.lead{color:var(--muted);margin-bottom:14px}
+.cta{background:var(--accent);color:#111;padding:12px 18px;border-radius:12px;font-weight:800;display:inline-block}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px}
+.card{background:var(--card);padding:14px;border-radius:12px;overflow:hidden}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:10px}
+.section-title{display:flex;justify-content:space-between;align-items:center}
+.features{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+.feature{background:var(--glass);padding:12px;border-radius:10px;min-width:160px}
+footer{margin-top:28px;padding:20px 0;color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+.map{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04)}
+.controls input, .controls select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+.row{display:flex;gap:12px}
+.row> *{flex:1}
+.badge{background:rgba(255,206,0,0.12);color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:700}
+.admin-note{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;color:var(--muted);font-size:13px}
+@media(max-width:900px){.hero{grid-template-columns:1fr} .grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="container">
+  <div class="brand"><img src="images/logo.png" alt="logo"><div><h1>ILAFE RENT CAR — حجز متقدم</h1><div class="small">0661414113 — Rabat</div></div></div>
+</header>
+<main class="container">
+  <div class="hero-card">
+    <h2>نموذج الحجز المتقدم</h2>
+    <p class="small">املأ تفاصيل الحجز وسنرسل لك تأكيدًا عبر البريد أو واتساب.</p>
+    <form id="bookingForm" class="controls">
+      <label>الاسم الكامل</label><input id="name" required>
+      <label>الهاتف</label><input id="phone" required>
+      <div class="row">
+        <div><label>من</label><input id="from" type="date" required></div>
+        <div><label>إلى</label><input id="to" type="date" required></div>
+      </div>
+      <label>السيارة</label>
+      <select id="car">
+        <option>Dacia Jogger</option>
+        <option>Range Rover</option>
+        <option>Opel Corsa</option>
+        <option>Renault Arkana</option>
+      </select>
+      <label>طريقة الدفع</label>
+      <select id="payment">
+        <option>دفع عند الاستلام (Pay on Delivery)</option>
+        <option>Stripe (Card)</option>
+        <option>PayPal</option>
+      </select>
+      <label>ملاحظات</label><textarea id="notes" rows="3"></textarea>
+      <div style="display:flex;gap:12px;margin-top:12px">
+        <button class="cta" id="send" type="button">احجز الآن</button>
+        <button class="cta" id="sendEmail" type="button" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)">إرسال عبر الإيميل</button>
+      </div>
+      <p id="msg" class="small" style="margin-top:10px;display:none"></p>
+    </form>
+    <div class="admin-note" style="margin-top:12px">
+      ملاحظة للمشغل: الحجوزات تُخزن محليًا في متصفحك ويمكن تصديرها من لوحة الإدارة، كما تُرسل أيضاً عبر Formspree (يلزم إعداد Formspree).
+    </div>
+  </div>
+
+  <section style="margin-top:18px">
+    <h3>خيارات الدفع</h3>
+    <div class="card small">
+      <p><strong>Pay on Delivery</strong> — تسديد عند الاستلام.</p>
+      <p><strong>Stripe</strong> — دعم المدفوعات ببطاقة الائتمان (يتطلب إعداد مفتاح Stripe في الخادم).</p>
+      <p><strong>PayPal</strong> — رابط تحويل سريع عبر PayPal.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// Save booking to localStorage and submit to Formspree
+function uuidv4(){return 'xxxx-4xxx-yxxx-xxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return (c=='x'?r:(r&0x3|0x8)).toString(16);});}
+
+document.getElementById('send').addEventListener('click', async function(){
+  const name=document.getElementById('name').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  const from=document.getElementById('from').value;
+  const to=document.getElementById('to').value;
+  const car=document.getElementById('car').value;
+  const payment=document.getElementById('payment').value;
+  const notes=document.getElementById('notes').value;
+  if(!name||!phone||!from||!to){ alert('المرجو إكمال الحقول المطلوبة'); return; }
+  const booking={id:uuidv4(),name,phone,from,to,car,payment,notes,created:new Date().toISOString()};
+  // save locally
+  let arr=JSON.parse(localStorage.getItem('ilafe_bookings')||'[]');
+  arr.unshift(booking);
+  localStorage.setItem('ilafe_bookings',JSON.stringify(arr));
+  // send to Formspree (replace endpoint if needed)
+  try{
+    await fetch('https://formspree.io/f/mwkgrqna',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,phone,from,to,car,payment,notes})
+    });
+  }catch(e){
+    console.log('Formspree error',e);
+  }
+  const msg=document.getElementById('msg'); msg.style.display='block'; msg.textContent='تم حفظ الطلب. سيتم التواصل معك عبر الهاتف أو البريد.';
+});
+
+document.getElementById('sendEmail').addEventListener('click', function(){
+  const name=document.getElementById('name').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  const from=document.getElementById('from').value;
+  const to=document.getElementById('to').value;
+  const car=document.getElementById('car').value;
+  const payment=document.getElementById('payment').value;
+  const notes=document.getElementById('notes').value;
+  const subject=encodeURIComponent('حجز سيارة — '+name);
+  const body=encodeURIComponent('الاسم: '+name+'\nالهاتف: '+phone+'\nمن: '+from+'\nإلى: '+to+'\nالسيارة: '+car+'\nالدفع: '+payment+'\nملاحظات: '+notes);
+  window.location.href='mailto:ilaferentcar@gmail.com?subject='+subject+'&body='+body;
+});
+</script>
+</body>
+</html>

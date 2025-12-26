@@ -1,0 +1,78 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة الإدارة — ILAFE</title><style>
+:root{
+  --bg:#050505; --card:#0f0f0f; --muted:#bfbdbd; --accent:#ffce00; --glass: rgba(255,255,255,0.03);
+  --radius:14px; --maxw:1200px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans Arabic',sans-serif;background:linear-gradient(180deg,#050505,#0b0b0b);color:#fff}
+.container{max-width:var(--maxw);margin:0 auto;padding:28px}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{display:flex;gap:16px;align-items:center}
+.brand img{width:110px;height:auto;border-radius:12px}
+.brand h1{margin:0;font-size:20px;letter-spacing:1px}
+.nav a{color:var(--muted);margin-left:12px;text-decoration:none;font-weight:600}
+.hero{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:center;margin-top:18px}
+.hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:24px;border-radius:18px;box-shadow:0 8px 40px rgba(0,0,0,0.6)}
+.h1{font-size:34px;margin:0 0 8px}
+.lead{color:var(--muted);margin-bottom:14px}
+.cta{background:var(--accent);color:#111;padding:12px 18px;border-radius:12px;font-weight:800;display:inline-block}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px}
+.card{background:var(--card);padding:14px;border-radius:12px;overflow:hidden}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:10px}
+.section-title{display:flex;justify-content:space-between;align-items:center}
+.features{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
+.feature{background:var(--glass);padding:12px;border-radius:10px;min-width:160px}
+footer{margin-top:28px;padding:20px 0;color:var(--muted)}
+.small{font-size:13px;color:var(--muted)}
+.map{border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.04)}
+.controls input, .controls select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+.row{display:flex;gap:12px}
+.row> *{flex:1}
+.badge{background:rgba(255,206,0,0.12);color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:700}
+.admin-note{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;color:var(--muted);font-size:13px}
+@media(max-width:900px){.hero{grid-template-columns:1fr} .grid{grid-template-columns:1fr}}
+</style></head><body>
+<header class="container"><div class="brand"><img src="images/logo.png"><div><h1>لوحة الإدارة</h1><div class="small">العنوان: Angle 56 Avenue de France..., Rabat</div></div></div></header>
+<main class="container">
+  <div class="hero-card">
+    <h2>قائمة الحجوزات (محليًا)</h2>
+    <p class="small">هنا تظهر الحجوزات المخزنة في متصفحك. يمكنك حذف أي عنصر أو تصدير الكل كملف CSV.</p>
+    <div style="margin-top:12px" id="list"></div>
+    <div style="margin-top:12px;display:flex;gap:12px">
+      <button class="cta" id="export">تصدير CSV</button>
+      <button class="cta" id="clear" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)">حذف الكل</button>
+    </div>
+    <div class="admin-note" style="margin-top:12px">
+      لتنبيه: للحصول على الحجوزات من Formspree إلى Google Sheets، استخدم إعدادات Formspree أو Zapier / Make (Integromat) لربطها بـ Google Sheets.
+    </div>
+  </div>
+</main>
+<script>
+function render(){
+  const list=document.getElementById('list');
+  const arr=JSON.parse(localStorage.getItem('ilafe_bookings')||'[]');
+  if(arr.length===0){ list.innerHTML='<div class="small">لا توجد حجوزات محفوظة محليًا.</div>'; return;}
+  list.innerHTML='';
+  arr.forEach((b,i)=>{
+    const node=document.createElement('div');
+    node.className='card';
+    node.innerHTML=`<strong>${b.name}</strong> — ${b.phone}<br><span class="small">من: ${b.from} إلى: ${b.to} — ${b.car} — ${b.payment}</span><div style="margin-top:8px"><button data-i="${i}" class="delete">حذف</button></div>`;
+    list.appendChild(node);
+  });
+  document.querySelectorAll('.delete').forEach(btn=>btn.addEventListener('click',e=>{
+    const i=parseInt(e.target.dataset.i);
+    const arr=JSON.parse(localStorage.getItem('ilafe_bookings')||'[]');
+    arr.splice(i,1); localStorage.setItem('ilafe_bookings',JSON.stringify(arr)); render();
+  }));
+}
+document.getElementById('export').addEventListener('click',function(){
+  const arr=JSON.parse(localStorage.getItem('ilafe_bookings')||'[]');
+  if(arr.length===0){ alert('لا توجد بيانات للتصدير'); return;}
+  const csv = ['id,name,phone,from,to,car,payment,notes,created'].concat(arr.map(a=>[a.id,a.name,a.phone,a.from,a.to,a.car,a.payment, (a.notes||'').replace(/\n/g,' '),a.created].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','))).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='ilafe_bookings.csv'; a.click(); URL.revokeObjectURL(url);
+});
+document.getElementById('clear').addEventListener('click',function(){ if(confirm('حذف كل الحجوزات؟')){ localStorage.removeItem('ilafe_bookings'); render(); }});
+render();
+</script></body></html>
